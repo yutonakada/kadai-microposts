@@ -20,12 +20,12 @@
                 </div>
                     
                 <div class="form-group">
-                    {!! Form::label('password', 'password') !!}
+                    {!! Form::label('password', 'Password') !!}
                     {!! Form::password('password', ['class' => 'form-cotrol']) !!}
                 </div>
                     
                 <div class="form-group">
-                    {!! Form::label('password_confirmation', 'password_confirmation') !!}
+                    {!! Form::label('password_confirmation', 'Password_confirmation') !!}
                     {!! Form::password('password_confirmation', ['class' => 'form-cotrol']) !!}
                 </div>
                     
