@@ -1,4 +1,4 @@
-<ul class="list-unstyled">
+<ul class="media-list">
     @foreach ($microposts as $micropost)
         <li class="media mb-3">
             <img class="mr-2 rounded" src="{{ Gravatar::src($micropost->user->email, 50) }}" alt="">
@@ -9,7 +9,6 @@
                 <div>
                     <p class="mb-0">{!! nl2br(e($micropost->content)) !!}</p>
                 </div>
-                <!-- 削除ボタン -->
                 <div>
                     @if (Auth::id() == $micropost->user_id)
                         {!! Form::open(['route' => ['microposts.destroy', $micropost->id], 'method' => 'delete']) !!}
