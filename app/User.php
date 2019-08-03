@@ -39,7 +39,7 @@ class User extends Authenticatable
     
     public function followers()
     {
-        return $this->belongsToMany(User::class, 'user_follow', 'user_id', 'follow_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_follow', 'follow_id', 'user_id')->withTimestamps();
     }
     
     public function follow($userId)
@@ -86,5 +86,47 @@ class User extends Authenticatable
         $follow_user_ids = $this->followings()->pluck('users.id')->toArray();
         $follow_user_ids[] = $this->id;
         return Micropost::whereIn('user_id', $follow_user_ids);
+    }
+    
+    // お気に入りの一覧を取得する
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
+    }
+    
+    public function favorite($userId)
+    {
+        // 既にお気に入りしているかの確認
+        $exist = $this->is_favoriting($userId);
+        
+        if ($exist) {
+            // 既にお気に入りしていれば何もしない
+            return false;
+        } else {
+            // お気に入りしていなければお気に入りする
+            $this->favorites()->attach($userId);
+            return true;
+        }
+    }
+    
+    public function unfavorite($userId)
+    {
+        // 既にお気に入りしているかの確認
+        $exist = $this->is_favoriting($userId);
+        
+        if ($exist) {
+            // 既にお気に入りしていれば解除する
+            $this->favorites()->detach($userId);
+            return true;
+        } else {
+            // お気に入りしていなければ何もしない
+            return false;
+        }
+    }
+    
+    // お気に入りしているかの確認のための関数
+    public function is_favoriting($userId)
+    {
+        return $this->favorites()->where('micropost_id', $userId)->exists();
     }
 }
